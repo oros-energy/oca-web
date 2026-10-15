@@ -8,8 +8,10 @@ import {
     onMounted,
     onWillStart,
     onWillUpdateProps,
-    useRef,
-    useState,
+    proxy,
+    signal,
+    t,
+    useProps,
 } from "@odoo/owl";
 import {TimelineCanvas} from "./timeline_canvas.esm";
 import {_t} from "@web/core/l10n/translation";
@@ -20,13 +22,23 @@ import {useService} from "@web/core/utils/hooks";
 const {DateTime} = luxon;
 
 export class TimelineRenderer extends Component {
+    props = useProps({
+        model: t.object(),
+        onAdd: t.function(),
+        onGroupClick: t.function(),
+        onItemDoubleClick: t.function(),
+        onMove: t.function(),
+        onRemove: t.function(),
+        onUpdate: t.function(),
+    });
+
     setup() {
         this.orm = useService("orm");
-        this.rootRef = useRef("root");
-        this.canvasRef = useRef("canvas");
+        this.rootRef = signal.ref();
+        this.canvasRef = signal.ref();
         this.model = this.props.model;
         this.params = this.model.params;
-        this.mode = useState({data: this.params.mode});
+        this.mode = proxy({data: this.params.mode});
         this.options = this.params.options;
         this.min_height = this.params.min_height;
         this.date_start = this.params.date_start;
@@ -57,15 +69,14 @@ export class TimelineRenderer extends Component {
      * Triggered when the timeline is attached to the DOM.
      */
     on_attach_callback() {
-        const $root = this.rootRef.el;
+        const $root = this.rootRef();
         if (this.params.class) {
             $root.classList.add(this.params.class);
         }
-        if (this.rootRef.el) {
-            const parentHeight = this.rootRef.el.parentElement?.clientHeight || 0;
+        if (this.rootRef()) {
+            const parentHeight = this.rootRef().parentElement?.clientHeight || 0;
             const buttonHeight =
-                this.rootRef.el.querySelector(".oe_timeline_buttons")?.clientHeight ||
-                0;
+                this.rootRef().querySelector(".oe_timeline_buttons")?.clientHeight || 0;
             const height = parentHeight - buttonHeight;
             if (height > this.min_height && this.timeline) {
                 this.timeline.setOptions({
@@ -215,7 +226,7 @@ export class TimelineRenderer extends Component {
                 whiteList: this.getXSSWhiteList(),
             },
         };
-        this.timeline = new vis.Timeline(this.canvasRef.el, {}, this.options);
+        this.timeline = new vis.Timeline(this.canvasRef(), {}, this.options);
         this.timeline.on("click", this.on_timeline_click.bind(this));
         if (!this.options.onUpdate) {
             // In read-only mode, catch double-clicks this way.
@@ -478,12 +489,3 @@ export class TimelineRenderer extends Component {
 }
 
 TimelineRenderer.template = "web_timeline.TimelineRenderer";
-TimelineRenderer.props = {
-    model: Object,
-    onAdd: Function,
-    onGroupClick: Function,
-    onItemDoubleClick: Function,
-    onMove: Function,
-    onRemove: Function,
-    onUpdate: Function,
-};
