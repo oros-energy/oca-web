@@ -75,3 +75,12 @@ class TestResCompany(common.TransactionCase):
             company_id.company_colors,
             "Invalid Navbar Background Color",
         )
+
+    def test_asset_links_not_accumulated(self):
+        qweb = self.env["ir.qweb"]
+        for _i in range(3):
+            links = qweb._get_asset_links("web_company_color.company_color_assets")
+        self.assertEqual(
+            [link for link in links if link.startswith(URL_BASE)],
+            [self.env.company.scss_get_url()],
+        )

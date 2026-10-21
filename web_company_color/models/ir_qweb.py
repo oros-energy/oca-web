@@ -8,58 +8,27 @@ from .assetsbundle import AssetsBundleCompanyColor
 class QWeb(models.AbstractModel):
     _inherit = "ir.qweb"
 
-    def _generate_asset_links_cache(
-        self,
-        bundle,
-        css=True,
-        js=True,
-        binary=False,
-        assets_params=None,
-        rtl=False,
-        autoprefix=False,
+    def _get_asset_links(
+        self, bundle, css=True, js=True, binary=False, debug=None, autoprefix=False
     ):
-        res = super()._generate_asset_links_cache(
-            bundle,
-            css=css,
-            js=js,
-            binary=binary,
-            assets_params=assets_params,
-            rtl=rtl,
-            autoprefix=autoprefix,
-        )
-        if bundle == "web_company_color.company_color_assets":
-            asset = AssetsBundleCompanyColor(
-                bundle, [], env=self.env, css=True, js=True
-            )
-            res += [asset.get_company_color_asset_node()]
-        return res
+        """Add the stylesheet of the active company outside of the asset cache.
 
-    def _generate_asset_links(
-        self,
-        bundle,
-        css=True,
-        js=True,
-        binary=False,
-        debug_assets=False,
-        assets_params=None,
-        rtl=False,
-        autoprefix=False,
-    ):
-        res = super()._generate_asset_links(
+        The links of a bundle are cached for all users and companies, so the
+        company stylesheet is added to a copy of them on every call.
+        """
+        res = super()._get_asset_links(
             bundle,
             css=css,
             js=js,
             binary=binary,
-            debug_assets=debug_assets,
-            assets_params=assets_params,
-            rtl=rtl,
+            debug=debug,
             autoprefix=autoprefix,
         )
         if bundle == "web_company_color.company_color_assets":
             asset = AssetsBundleCompanyColor(
                 bundle, [], env=self.env, css=True, js=True
             )
-            res += [asset.get_company_color_asset_node()]
+            res = [*res, asset.get_company_color_asset_node()]
         return res
 
     def _get_asset_content(self, bundle, assets_params=None):
