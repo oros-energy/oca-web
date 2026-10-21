@@ -2,10 +2,12 @@ import {
     TimelineArchParser,
     TimelineParseArchError,
 } from "@web_timeline/views/timeline/timeline_arch_parser.esm";
-import {describe, expect, test} from "@odoo/hoot";
+import {beforeEach, describe, expect, test} from "@odoo/hoot";
+import {allowTranslations} from "@web/../tests/web_test_helpers";
 import {parseXML} from "@web/core/utils/xml";
 
 describe.current.tags("headless");
+beforeEach(allowTranslations);
 
 const FAKE_ORDER_FIELDS = {
     display_name: {string: "Display Name", type: "char"},

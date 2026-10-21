@@ -1,3 +1,4 @@
+import {advanceTime, describe, expect, test} from "@odoo/hoot";
 import {
     contains,
     defineModels,
@@ -7,7 +8,6 @@ import {
     onRpc,
     preloadBundle,
 } from "@web/../tests/web_test_helpers";
-import {describe, expect, test} from "@odoo/hoot";
 import {queryAll} from "@odoo/hoot-dom";
 
 describe.current.tags("desktop");
@@ -102,7 +102,8 @@ test("delete button on a selected item", async () => {
     const items = getItemContents("Record 2");
     expect(items).toHaveLength(1);
     await contains(items[0]).click();
-    expect(items[0].parentElement.querySelectorAll(".vis-delete")).toHaveLength(1);
+    await advanceTime(500);
+    expect(".vis-item.vis-selected .vis-delete").toHaveCount(1);
 });
 
 test("no delete button when delete is disabled", async () => {
@@ -114,5 +115,7 @@ test("no delete button when delete is disabled", async () => {
     const items = getItemContents("Record 2");
     expect(items).toHaveLength(1);
     await contains(items[0]).click();
-    expect(items[0].parentElement.querySelectorAll(".vis-delete")).toHaveLength(0);
+    await advanceTime(500);
+    expect(".vis-item.vis-selected").toHaveCount(1);
+    expect(".vis-item.vis-selected .vis-delete").toHaveCount(0);
 });
