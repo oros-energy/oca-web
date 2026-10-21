@@ -19,6 +19,10 @@ class ResCompany(models.Model):
           background: %(color_navbar_bg)s !important;
           background-color: %(color_navbar_bg)s !important;
           color: %(color_navbar_text)s !important;
+          --NavBar-entry-backgroundColor: %(color_navbar_bg)s;
+          --NavBar-entry-backgroundColor--hover: %(color_navbar_bg_hover)s;
+          --NavBar-entry-backgroundColor--focus: %(color_navbar_bg_hover)s;
+          --NavBar-entry-backgroundColor--active: %(color_navbar_bg_hover)s;
 
           .show {
             .dropdown-toggle {
@@ -38,7 +42,7 @@ class ResCompany(models.Model):
             }
           }
         }
-        .o_menu_brand {
+        .o_main_navbar .o_menu_brand {
             color: %(color_navbar_text)s !important;
             &:hover, &:focus, &:active, &:focus:active {
               background-color: %(color_navbar_bg_hover)s !important;
