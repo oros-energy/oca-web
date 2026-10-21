@@ -35,7 +35,7 @@
                         class="alert alert-info info_icon mt-2 d-flex align-items-center"
                         role="alert"
                     >
-                        <span class="fa fa-info fa-2x me-2" />
+                        <i class="oi oi-fw fs-2 me-2" data-icon="info" />
                         In order for the changes to take effect, please refresh
                         the page.
                     </div>
