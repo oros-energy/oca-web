@@ -171,7 +171,7 @@ class ResCompany(models.Model):
                 "color_link_text_hover",
             )
             result = super().write(values)
-            if any([field in values for field in fields_to_check]):
+            if any(field in values for field in fields_to_check):
                 self.scss_create_or_update_attachment()
         else:
             result = super().write(values)
