@@ -34,9 +34,6 @@
             "web_timeline/static/src/views/timeline/timeline_model.esm.js",
             "web_timeline/static/src/views/timeline/timeline_canvas.esm.js",
         ],
-        "web.assets_tests": [
-            "web_timeline/static/tests/tours/**/*",
-        ],
         "web.assets_unit_tests": [
             "web_timeline/static/tests/**/*.test.js",
         ],
