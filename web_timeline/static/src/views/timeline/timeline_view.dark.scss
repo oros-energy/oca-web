@@ -1,0 +1,80 @@
+// vis-timeline ships a light theme in its own bundle, which loads after the
+// backend assets. Every color of it that shows up in a timeline view gets a
+// value of the dark bundle here, and the view class outranks the library.
+$vis-dark-line-color: rgba($o-main-text-color, 0.1);
+$vis-dark-item-background-color: mix($o-brand-primary, $o-view-background-color, 25%);
+$vis-dark-item-hover-background-color: mix(
+    $o-brand-primary,
+    $o-view-background-color,
+    45%
+);
+
+.oe_timeline_view .vis-timeline {
+    border-color: $border-color;
+
+    .vis-panel {
+        border-color: $border-color;
+    }
+
+    .vis-time-axis .vis-text,
+    .vis-labelset .vis-label {
+        color: $o-main-text-color;
+    }
+
+    .vis-labelset .vis-label,
+    .vis-foreground .vis-group {
+        border-bottom-color: $border-color;
+    }
+
+    .vis-grid.vis-minor {
+        border-color: $vis-dark-line-color;
+    }
+
+    .vis-grid.vis-major {
+        border-color: $border-color;
+    }
+
+    .vis-grid {
+        &.vis-saturday,
+        &.vis-sunday {
+            background: rgba($o-main-text-color, 0.04);
+        }
+    }
+
+    .vis-item {
+        color: $o-main-text-color;
+        background-color: $vis-dark-item-background-color;
+        border-color: $o-brand-primary;
+
+        &:hover,
+        .vis-item-content:hover {
+            background-color: $vis-dark-item-hover-background-color !important;
+        }
+
+        &.vis-selected {
+            background-color: mix($o-warning, $o-view-background-color, 30%);
+            border-color: $o-warning;
+        }
+
+        &.vis-background {
+            background-color: rgba($o-brand-primary, 0.15);
+        }
+
+        // The colors attribute of the view paints an item inline, mostly in
+        // light tones, so its text stays dark.
+        &[style*="background-color"] {
+            color: $o-webclient-background-color;
+        }
+    }
+}
+
+// The dependency arrows are drawn in black, CSS overrides their attributes.
+.oe_timeline_view_canvas {
+    polyline {
+        stroke: $o-main-text-color;
+    }
+
+    marker polygon {
+        fill: $o-main-text-color;
+    }
+}
